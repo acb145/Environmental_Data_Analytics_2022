@@ -1,6 +1,6 @@
 ---
 title: "Assignment 1: Introduction"
-author: "Student Name"
+author: "Andrew Brantley"
 output: pdf_document
 geometry: margin=2.54cm
 ---
@@ -14,7 +14,7 @@ This exercise accompanies the introductory material in Environmental Data Analyt
 3. Work through the steps, **creating code and output** that fulfill each instruction.
 4. Be sure to **answer the questions** in this assignment document.
 6. When you have completed the assignment, **Knit** the text and code into a single PDF file.
-8. After Knitting, submit the completed exercise (PDF file) to the dropbox in Sakai. Add your last name into the file name (e.g., "Lima_A01_Introduction.Rmd") prior to submission.
+8. After Knitting, submit the completed exercise (PDF file) to the dropbox in Sakai. Add your last name into the file name (e.g., "Salk_A03_Introduction.Rmd") prior to submission.
 
 The completed exercise is due on <>.
 
@@ -22,21 +22,22 @@ The completed exercise is due on <>.
 
 1. What are your previous experiences with data analytics, R, and Git? Include both formal and informal training.
 
-> Answer: 
+> Answer: I have used Excel in most classes in undergrad and at the Nic School for general data analysis. This will be my second class that heavily uses R, fourth class using R at all so I have a good amount of exposure to the basics of R. I have never used Git before in any setting. 
 
 2. Are there any components of the course about which you feel confident?
 
-> Answer: 
+> Answer: I feel confident about the basics of using R and I feel confident about manipulating datasets in R for many basic analyses. 
 
 3. Are there any components of the course about which you feel apprehensive?
 
-> Answer: 
+> Answer: I am a little apprehensive about some of the technology that we will be using such as Git. I feel like understanding how all the programs/packages that we installed for class actually work together is confusing and it feels a little overwhelming but I am excited to learn more about how they work together. I look forward to demystifying all of the programs we downloaded as we work with them throughout the semester.
 
 
 ## 2) GitHub
 
 Provide a link below to your forked course repository in GitHub. Make sure you have pulled all recent changes from the course repository  and that you have updated your course README file. 
 
-> Answer: 
+> Answer: https://github.com/acb145/Environmental_Data_Analytics_2021.git
+
 
 
