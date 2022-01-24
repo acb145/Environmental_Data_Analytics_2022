@@ -1,7 +1,7 @@
 ---
 title: "Lab 3 - Data Types | Exploring Datasets"
 author: "Environmental Data Analytics | John Fay and Luana Lima "
-date: "Spring 2022"
+date: "02/03/2021"
 output: pdf_document
 ---
 
@@ -37,22 +37,22 @@ vector2
 vector3 <- c(TRUE,TRUE,TRUE,FALSE,TRUE,FALSE) #logical vector
 vector3
 
-vector1[3] # 
+vector1[3] # Calls 3rd number in vector1
 
 # Matrices ----
-matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # 
+matrix1 <- matrix(1:20, nrow = 5,ncol = 4) # creates matrix 1-20 by column
 matrix1
-matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) #
+matrix2 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE) # creates matrix 1-20 by row
 matrix2
 matrix3 <- matrix(1:20, nrow = 5, ncol = 4, byrow = TRUE, # return after comma continues the line
                   dimnames = list(c("uno", "dos", "tres", "cuatro", "cinco"), 
-                                  c("un", "deux", "trois", "cat"))) #
+                                  c("un", "deux", "trois", "cat"))) # names colums and rows
 
-matrix1[4, ] #
-matrix1[ , 3] #
-matrix1[c(12, 14)] #
-matrix1[c(12:14)] #
-matrix1[2:4, 1:3] #
+matrix1[4, ] # prints 4th row in matrix
+matrix1[ , 3] # prints 3rd column in matrix
+matrix1[c(12, 14)] # prints 12th and 14th item in matrix
+matrix1[c(12:14)] # prints items 12-14 in matrix
+matrix1[2:4, 1:3] # prints rows 2-4 and columns 1-3 in matrix
 
 cells <- c(1, 26, 24, 68)
 rnames <- c("R1", "R2")
@@ -66,14 +66,14 @@ list1 <- list(name = "Maria", mynumbers = vector1, mymatrix = matrix1, age = 5.3
 list1[[2]]
 
 # Data Frames ----
-d <- c(1, 2, 3, 4) # What type of vector?
-e <- c("red", "white", "red", NA) # What type of vector?
-f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector?
-dataframe1 <- data.frame(d,e,f) #
-names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) # 
+d <- c(1, 2, 3, 4) # What type of vector? number
+e <- c("red", "white", "red", NA) # What type of vector? character
+f <- c(TRUE, TRUE, TRUE, FALSE) # What type of vector? logical
+dataframe1 <- data.frame(d,e,f) # creates dataframe of d,e,and f vectors
+names(dataframe1) <- c("ID","Color","Passed"); View(dataframe1) # names columns in dataframe
 
-dataframe1[1:2,] # 
-dataframe1[c("ID","Passed")] # 
+dataframe1[1:2,] # prints rows 1-2
+dataframe1[c("ID","Passed")] # prints columns ID and Passed
 dataframe1$ID
 
 ```
@@ -83,7 +83,7 @@ Question: How do the different types of data appear in the Environment tab?
 
 Question: In the R chunk below, write "dataframe1$". Press `tab` after you type the dollar sign. What happens?
 
-> Answer: 
+> Answer: Tries to autofill column names
 
 
 
@@ -94,11 +94,27 @@ Find a ten-day forecast of temperatures (Fahrenheit) for Durham, North Carolina.
 
 ```{r}
 
+DurhamHighTemp_F <- c(51,57,39,41,45,38,41,51,52,52)
+DurhamHighTemp_F
+  
+DurhamLowTemp_F <- c(26,29,24,18,26,21,19,26,26,28)
+DurhamLowTemp_F
+
 ```
 
 Now, create two additional vectors that include the ten-day forecast for the high and low temperatures in Celsius. Use a function to create the two new vectors from your existing ones in Fahrenheit.
 
 ```{r}
+
+FtoC_Conversion <- function(x) {
+  (x-32)/1.8
+}
+
+DurhamHighTemp_C <- FtoC_Conversion(DurhamHighTemp_F)
+DurhamHighTemp_C
+
+DurhamLowTemp_C <- FtoC_Conversion(DurhamLowTemp_F)
+DurhamLowTemp_C
 
 ```
 
@@ -106,11 +122,23 @@ Combine your four vectors into a data frame and add informative column names.
 
 ```{r}
 
+DurhamTemps_FandC <- data.frame(DurhamHighTemp_F,DurhamLowTemp_F,DurhamHighTemp_C,DurhamLowTemp_C)
+
+colnames(DurhamTemps_FandC) <- c("High Temp F","Low Temp F","High Temp C","Low Temp C")
+DurhamTemps_FandC
+
 ```
 
 Use the common functions `summary` and `sd` to obtain basic data summaries of the ten-day forecast. How would you call these functions differently for the entire data frame vs. a single column? Attempt to demonstrate both options below.
 
 ```{r}
+
+summary(DurhamTemps_FandC)
+sd(DurhamTemps_FandC)
+
+summary(DurhamTemps_FandC$`High Temp F`)
+sd(DurhamTemps_FandC$`High Temp F`)
+
 
 ```
 
