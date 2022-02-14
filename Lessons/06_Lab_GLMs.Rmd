@@ -19,6 +19,7 @@ editor_options:
 ```{r, message = FALSE}
 library(tidyverse)
 library(agricolae)   
+library(viridis)
 
 PeterPaul.chem.nutrients <- read.csv("./Data/Processed/NTL-LTER_Lake_Chemistry_Nutrients_PeterPaul_Processed.csv", stringsAsFactors = TRUE)
 # Set date to date format
@@ -66,7 +67,8 @@ Are Ozone levels below the threshold for "good" AQI index (0-50)?
 
 > Exercise 1: State the hypotheses for testing mean of AQI index.
 
-> Answer: 
+> Answer: Null: Ozone levels are not below the threshold for good.
+          Alternative: Ozone levels are below the threshold for good.
 
 
 ```{r}
@@ -94,7 +96,7 @@ print(Ozone.plot)
 
 Write a sentence or two about the results of this test. Include both the results of the test and an interpretation that puts the findings in context of the research question.
 
-> 
+> There is  a large positive skew on the dataset with some outlier values at higher AQI values. The majority of the data seems to fall below the threshold for good air quality with some outliers with much higher values.
 
 ### Two-sample t-test
 
@@ -125,7 +127,6 @@ summary(O3.twosample2)
 
 plot(O3.twosample2)
 
-
 ```
 
 
@@ -152,6 +153,30 @@ Create three plots, each with appropriately formatted axes and legends. Choose a
 ```{r}
 #Exercise 2:
 
+# Density Plot
+
+Plot2.1 <- ggplot(EPAair, aes(x = Ozone)) +
+  geom_density(aes(fill = as.factor(Year)), alpha = 0.5) +
+  labs(x = "Ozone AQI Level", y = "Density", fill = "") +
+  scale_fill_viridis(option = "C", discrete = TRUE)
+Plot2.1
+
+# Box Plot
+
+Plot2.2 <- ggplot(EPAair, aes(x = as.factor(Year), y = Ozone)) +
+  geom_boxplot() +
+  stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, label = c("b", "a")) + #marking text at max of y variable
+  labs(x = "", y = "Ozone AQI Level") +
+  scale_color_viridis(option = "C", discrete = TRUE)
+Plot2.2
+
+# Violin Plot
+
+Plot2.3 <- ggplot(EPAair, aes(x = as.factor(Year), y = Ozone)) +
+  geom_violin(aes(fill = as.factor(Year)), draw_quantiles = 0.5) +
+  stat_summary(geom = "text", fun.y = max, vjust = -1, size = 4, label = c("b", "a")) +
+  labs(x = "", y = "Ozone AQI Level", fill = "")
+Plot2.3
 
 ```
 
@@ -165,9 +190,15 @@ For the NTL-LTER dataset, can we predict PM2.5 from Ozone?
 
 #Exercise 3: Run a linear regression PM2.5 by Ozone. Find the p-value and R-squared value. 
 
-
+Reg1 <- lm(data = EPAair, PM2.5 ~ Ozone)
+summary(Reg1)
 
 #Exercise 4: Build a scatterplot. Add a line and standard error for the linear regression. 
+
+Reg1.Scatter <- ggplot(EPAair, aes(Ozone, PM2.5)) +
+  geom_point() +
+  geom_smooth(method = "lm", se = TRUE)
+Reg1.Scatter
 
 
 
