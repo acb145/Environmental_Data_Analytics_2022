@@ -213,15 +213,27 @@ What other variables can we add to improve model?
 
 #Exercise 5: Build correlation plots and identify more possible explanatory variables to add to the regression.
 
+# install.packages("corrplot")
+library(corrplot)
 
+EPAair.proc <- EPAair %>% 
+  select(meanLat:PM2.5) %>% 
+  na.omit()
+
+EPAair.cor <- cor(EPAair.proc)
+corrplot(EPAair.cor, method = "ellipse")
+corrplot.mixed(EPAair.cor, upper = "ellipse")
 
 
 #Exercise 6: Choose a model by AIC in a Stepwise Algorithm. Do the results from AIC match the variables you selected on Exercise 5?
 
-
-
+EPAair.AIC <- lm(data = EPAair, PM2.5 ~ Ozone + Year + Month + meanLng + meanLat)
+step(EPAair.AIC)
 
 #Exercise 7: Run another regression using the variables selected on Exercise 6. Compare r-squared value with the one from Exercise 5. 
+
+EPAair.Model <- lm(data = EPAair, PM2.5 ~ Ozone + Month + meanLng + meanLat)
+summary(EPAair.Model)
 
 ```
 
