@@ -51,6 +51,7 @@ Andrew.Theme <- theme_gray(base_size = 14) +
         panel.grid.major.x = element_line(colour = "black", linetype = 3, size = 0.5), 
         panel.grid.major.y =  element_line(colour = "black", linetype = 3, size = 0.5))
 
+theme_set(Andrew.Theme)
 
 ```
 
