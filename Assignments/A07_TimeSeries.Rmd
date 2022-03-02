@@ -133,7 +133,7 @@ Study question: Have ozone concentrations changed over the 2010s at this station
 8. Use a linear interpolation to fill in missing daily data for ozone concentration. Why didn't we use a piecewise constant or spline interpolation?
 
 ```{r}
-#8
+#8 
 
 ```
 
