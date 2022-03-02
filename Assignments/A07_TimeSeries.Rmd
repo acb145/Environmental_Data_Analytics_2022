@@ -1,10 +1,10 @@
 ---
 title: "Assignment 7: Time Series Analysis"
-author: "Student Name"
+author: "Andrew Brantley"
 output: pdf_document
 geometry: margin=2.54cm
 editor_options: 
-  chunk_output_type: console
+  chunk_output_type: inline
 ---
 
 ## OVERVIEW
@@ -30,6 +30,25 @@ The completed exercise is due on Monday, March 14 at 7:00 pm.
 ```{r}
 #1
 
+# checking working directory
+getwd()
+
+# loading packages
+library(tidyverse)
+library(lubridate)
+library(zoo)
+library(trend)
+library(plyr)
+
+# building personal theme
+Andrew.Theme <- theme_gray(base_size = 14) +
+  theme(axis.text = element_text(colour = "black", face = "italic"), 
+        legend.position = "right", 
+        panel.grid.major.x = element_line(colour = "black", linetype = 3, size = 0.5), 
+        panel.grid.major.y =  element_line(colour = "black", linetype = 3, size = 0.5))
+
+theme_set(Andrew.Theme)
+
 ```
 
 
@@ -38,6 +57,14 @@ The completed exercise is due on Monday, March 14 at 7:00 pm.
 ```{r, message = FALSE}
 #2
 
+# importing ten Ozone datasets
+OzoneFiles = list.files(path = "../Data/Raw/Ozone_TimeSeries/", pattern="*.csv", full.names=TRUE)
+OzoneFiles
+
+# combining datasets into one dataframe
+GaringerOzone <- OzoneFiles %>%
+  ldply(read.csv)
+dim(GaringerOzone)
 
 ```
 
@@ -54,11 +81,29 @@ The completed exercise is due on Monday, March 14 at 7:00 pm.
 ```{r}
 # 3
 
+# setting Date column as date class
+GaringerOzone$Date <- as.Date(GaringerOzone$Date, format = "%m / %d / %Y")
+
 # 4
+
+# filtering dataset for Date, Daily.Max.8.hour.Ozone.Concentration, and DAILY_AQI_VALUE columns
+GaringerOzone.Subset <- GaringerOzone %>% 
+                          select(Date, Daily.Max.8.hour.Ozone.Concentration, DAILY_AQI_VALUE)
 
 # 5
 
+# creating daily dataset
+Days <- as.data.frame(seq(as.Date("2010-01-01"), as.Date("2019-12-31"), by = "days"))
+
+# renaming column name to "Date"
+colnames(Days) <- c("Date")
+
 # 6
+
+# joining dataframes
+GaringerOzone <- left_join(Days, GaringerOzone.Subset, by = c("Date"))
+dim(GaringerOzone)
+
 
 ```
 
@@ -69,9 +114,17 @@ The completed exercise is due on Monday, March 14 at 7:00 pm.
 ```{r}
 #7
 
+# graphing ozone data over time
+
+OzoneConc.Plot <- ggplot(GaringerOzone, aes(Date, Daily.Max.8.hour.Ozone.Concentration)) +
+                      geom_line() +
+                      geom_smooth(method = "lm") +
+                      labs(x = "Date", y = "Ozone Concentration (ppm)")
+OzoneConc.Plot
+
 ```
 
->Answer: 
+>Answer: From this plot it seems that there is a slight downward trend over this decade. There is also a very noticeable seasonal trend that oscillates the ozone concentrations on a yearly basis. 
 
 ## Time Series Analysis
 
