@@ -82,7 +82,7 @@ The power in this is that we aren't limited to sending requests and handling res
 
 ```{r pull.and.plot.discharge.data}
 #Set the URL
-theURL <- 'https://waterdata.usgs.gov/nwis/uv?search_site_no=02087500&period=7&format=rdb'
+theURL <- 'https://waterdata.usgs.gov/nwis/uv?search_site_no=02085070&period=24&format=rdb'
 
 #Get the data, which starts on line 30
 gage_data <- read.table(theURL,skip = 29,header=TRUE,sep='\t') 
@@ -127,7 +127,7 @@ scode = "00003"  #mean
 
 #Identify start and end dates
 start.date = "1930-10-01"
-end.date = "2021-03-21"
+end.date = "2022-03-21"
 
 #Load in data using the package's "readNWISdv" function
 neuse <- readNWISdv(siteNumbers = siteNo, 
@@ -203,45 +203,69 @@ The RVest scraping workflow is as follows:
 
 ```{r eval=FALSE}
 #1 Link to the web site using read_html
+the_website <- read_html('https://www.eia.gov/electricity/state/')
 the_website
 
 #2&3 Locate elements and read their text attributes into variables
-the_states <- 
-the_price <- 
-the_capacity <- 
-net_generation <- 
-total_retail <- 
+the_states <-     the_website %>% html_nodes('.basic_table a') %>% html_text()
+the_price <-      the_website %>% html_nodes('td:nth-child(2)') %>% html_text()
+the_capacity <-   the_website %>% html_nodes('td:nth-child(3)') %>% html_text()
+net_generation <- the_website %>% html_nodes('td:nth-child(4)') %>% html_text()
+total_retail <-   the_website %>% html_nodes('td:nth-child(5)') %>% html_text()
   
 #3 Construct a dataframe from the values
+
+the_df <- data.frame(
+              "State" = the_states,
+              "Price" = as.numeric(the_price),
+              "Capacity" = as.numeric(gsub(",","",the_capacity)),
+              "Generation" = as.numeric(gsub(",","",net_generation)),
+              "Total Retail Value" = as.numeric(gsub(",","",total_retail)),
+              "Year" = 2019)
+the_df
+
 ```
 
 
 ```{r create.scrape.function}
 scrape.it <- function(the_year){
   #Get the proper url
-  the_url <- ifelse(the_year==2019,
+  the_url <- ifelse(the_year==2020,
                     'https://www.eia.gov/electricity/state/',
-                    paste('https://www.eia.gov/electricity/state/archive',the_year,'/'))
+                    paste('https://www.eia.gov/electricity/state/archive/',the_year,'/'))
 
-  #Fetch the website
-  #<enter code from above here> 
+#Fetch the website
+the_website <- read_html(the_url)
   
-  #Scrape the data
-  #<enter code from above here>
+#Scrape the data
+the_states <-     the_website %>% html_nodes('.basic_table a') %>% html_text()
+the_price <-      the_website %>% html_nodes('td:nth-child(2)') %>% html_text()
+the_capacity <-   the_website %>% html_nodes('td:nth-child(3)') %>% html_text()
+net_generation <- the_website %>% html_nodes('td:nth-child(4)') %>% html_text()
+total_retail <-   the_website %>% html_nodes('td:nth-child(5)') %>% html_text()
   
-  #Convert to dataframe
-  #<enter code from above here>
+#Convert to dataframe
+the_df_multiyear <- data.frame(
+              "State" = the_states,
+              "Price" = as.numeric(the_price),
+              "Capacity" = as.numeric(gsub(",","",the_capacity)),
+              "Generation" = as.numeric(gsub(",","",net_generation)),
+              "Total Retail Value" = as.numeric(gsub(",","",total_retail)),
+              "Year" = the_year)
   
-  #Return the dataframe
-  return(the_df)
+#Return the dataframe
+return(the_df_multiyear)
 }
 
 
 # Use the above function to scrape data for 2017
-
+scrape.it(2017)
 
 # Map the function to scrape data from 2017 to 2020
+the_years <- seq(2017,2019)
+the_dfs <- lapply(X = the_years, FUN = scrape.it) %>%  bind_rows()
 
+the_dfs <- map(the_years, scrape.it) %>%  bind_rows()
 
 ```
 
