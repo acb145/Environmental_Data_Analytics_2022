@@ -8,28 +8,29 @@ library(tidyverse)
 # Specify the date column as a date
 # Remove negative values for depth_id 
 # Include only lakename and sampledate through po4 columns
-nutrient_data <- 
-nutrient_data$sampledate <- as.Date()
-nutrient_data <-  %>%
-   %>%
+nutrient_data <- read.csv("../Environmental_Data_Analytics_2022/Data/Processed/NTL-LTER_Lake_Nutrients_PeterPaul_Processed.csv",
+                              stringsAsFactors = TRUE)
+nutrient_data$sampledate <- as.Date(nutrient_data$sampledate, format = "%Y - %m - %d")
+nutrient_data <-  nutrient_data %>% 
+                    filter(depth_id >= 0) %>% 
+                    select(lakename, sampledate:po4)
   
-
 #### Define UI ----
 ui <- fluidPage(theme = shinytheme("yeti"),
   # Choose a title
-  titlePanel(),
+  titlePanel("Peter and Paul Lake Nutrients"),
   sidebarLayout(
     sidebarPanel(
       
       # Select nutrient to plot
-      selectInput(inputId = ,
-                  label = ,
-                  choices = , 
-                  selected = ),
+      selectInput(inputId = "dropdown_input",
+                  label = "Nutrient",
+                  choices = "tn_ug", "tp_ug", "nh34", "no23", "po4", 
+                  selected = "tn_ug"),
       
       # Select depth
-      checkboxGroupInput(inputId = ,
-                         label = ,
+      checkboxGroupInput(inputId = "dropdown_input",
+                         label = "Depth",
                          choices = ,
                          selected = ,
       

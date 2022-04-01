@@ -11,14 +11,14 @@ nutrient_data <- nutrient_data %>%
   select(lakename, sampledate:po4)
 
 #### Define UI ----
-ui <- fluidPage(theme = shinytheme("yeti"),
+ui <- fluidPage(theme = shinytheme("cyborg"),
   titlePanel("Nutrients in Peter Lake and Paul Lake"),
   sidebarLayout(
     sidebarPanel(
       
       # Select nutrient to plot
-      selectInput(inputId = "y", 
-                  label = "Nutrient",
+      radioButtons(inputId = "y", 
+                  label = "Nutrient Type",
                   choices = c("tn_ug", "tp_ug", "nh34", "no23", "po4"), 
                   selected = "tp_ug"),
       
@@ -29,10 +29,10 @@ ui <- fluidPage(theme = shinytheme("yeti"),
                          selected = c(1, 7)),
       
       # Select lake
-      checkboxGroupInput(inputId = "shape",
+      selectInput(inputId = "shape",
                          label = "Lake",
                          choices = c("Peter Lake", "Paul Lake"),
-                         selected = "Peter Lake"),
+                         selected = "Paul Lake"),
 
       # Select date range to be plotted
       sliderInput(inputId = "x",
@@ -63,11 +63,11 @@ server <- function(input, output) {
         ggplot(filtered_nutrient_data(), 
                aes_string(x = "sampledate", y = input$y, 
                           fill = "depth_id", shape = "lakename")) +
-          geom_point(alpha = 0.8, size = 2) +
-          theme_classic(base_size = 14) +
+          geom_point(alpha = 0.9, size = 3) +
+          theme_classic(base_size = 16) +
           scale_shape_manual(values = c(21, 24)) +
           labs(x = "Date", y = expression(Concentration ~ (mu*g / L)), shape = "Lake", fill = "Depth ID") +
-          scale_fill_distiller(palette = "YlOrBr", guide = "colorbar", direction = 1)
+          scale_fill_distiller(palette = "Blues", guide = "colorbar", direction = 1)
           #scale_fill_viridis_c(option = "viridis", begin = 0, end = 0.8, direction = -1)
       })
        
